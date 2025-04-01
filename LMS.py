@@ -118,7 +118,7 @@ class LibrarySystem:
         self.member_phone_entry = ttk.Entry(entry_frame)
         self.member_phone_entry.grid(row=1, column=1, padx=5, pady=5)
 
-        ttk.Button(entry_frame, text="Add Member", command=self.add_member).grid(row=2, column=0, columnspan=4, pady=10)
+        ttk.Button(entry_frame, text="Add Member", command=self.add_member).grid(row=2, column=0, pady=10)
         ttk.Button(entry_frame, text="Delete Selected Member", command=self.delete_member).grid(row=2, column=1, pady=10)
 
         # Members list
