@@ -119,6 +119,7 @@ class LibrarySystem:
         self.member_phone_entry.grid(row=1, column=1, padx=5, pady=5)
 
         ttk.Button(entry_frame, text="Add Member", command=self.add_member).grid(row=2, column=0, columnspan=4, pady=10)
+        ttk.Button(entry_frame, text="Delete Selected Member", command=self.delete_member).grid(row=2, column=1, pady=10)
 
         # Members list
         list_frame = ttk.LabelFrame(self.members_frame, text="Members List")
@@ -232,6 +233,35 @@ class LibrarySystem:
             self.clear_member_entries()
         except sqlite3.Error as e:
             messagebox.showerror("Error", f"Failed to add member: {str(e)}")
+
+    def delete_member(self):
+    try:
+        selected_item = self.members_tree.selection()[0]
+        member_id = self.members_tree.item(selected_item)['values'][0]
+
+        conn = sqlite3.connect('library.db')
+        c = conn.cursor()
+
+        # Check if member has any active loans
+        c.execute("SELECT COUNT(*) FROM loans WHERE member_id = ? AND returned = 0", (member_id,))
+        active_loans = c.fetchone()[0]
+
+        if active_loans > 0:
+            messagebox.showerror("Error", "Cannot delete member with active loans!")
+            conn.close()
+            return
+
+        if messagebox.askyesno("Confirm Delete", "Are you sure you want to delete this member?"):
+            c.execute("DELETE FROM members WHERE id = ?", (member_id,))
+            conn.commit()
+            conn.close()
+            self.refresh_members()
+            messagebox.showinfo("Success", "Member deleted successfully!")
+    except IndexError:
+        messagebox.showerror("Error", "Please select a member to delete")
+    except sqlite3.Error as e:
+        messagebox.showerror("Error", f"Failed to delete member: {str(e)}")
+        
 
     def create_loan(self):
         try:
