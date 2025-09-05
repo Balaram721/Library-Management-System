@@ -1,0 +1,13 @@
+# Byte-compiled / cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# SQLite database
+*.db
+
+# VS Code / IDE settings
+.vscode/
+.idea/
+*.swp
