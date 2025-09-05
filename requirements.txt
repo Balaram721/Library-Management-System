@@ -1,0 +1,5 @@
+# Requirements for Library Management System
+# All are included with Python standard library
+tkinter
+sqlite3
+datetime
